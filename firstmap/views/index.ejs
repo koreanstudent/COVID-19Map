@@ -109,6 +109,8 @@ function getClickHandler(i) {
   }
 }
 
+let currentUse = true; // 마커를 최초 1회만 생성
+
 // 현재 위치 받아온다.
 $("#current").click(() => {
   if ("geolocation" in navigator) {
@@ -117,10 +119,17 @@ $("#current").click(() => {
       const lng = position.coords.longitude;
       const latlng = new naver.maps.LatLng(lat,lng);
 
+    if(currentUse) {
       marker = new naver.maps.Marker({
         map: map,
-        position:latlng
+        position:latlng,
+        icon : {
+          content: '<img class="pulse" draggable="false" unselectable="on" src="https://myfirstmap.s3.ap-northeast-2.amazonaws.com/circle.png">',
+          anchor : new naver.maps.Point(11,11)
+        },
       });
+      currentUse = false;
+    }
 
       map.setZoom(14, false);
       map.panTo(latlng);
